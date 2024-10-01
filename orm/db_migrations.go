@@ -9,7 +9,8 @@ import (
 	"time"
 
 	"github.com/bbfh-dev/go-orm/orm/tables"
-	"github.com/bbfh-dev/go-tools/tools"
+	"github.com/bbfh-dev/go-tools/tools/terr"
+	"github.com/bbfh-dev/go-tools/tools/tlog"
 )
 
 const MIGRATE_ENV = "ORM_MIGRATE"
@@ -77,18 +78,17 @@ func (db *DB) GenMigrations() error {
 	if len(migrations) != 0 {
 		env, ok := os.LookupEnv(MIGRATE_ENV)
 		if !ok || env == "0" {
-			tools.Log(
-				slog.Warn,
+			tlog.Warn(
 				"(ORM) You have %d unapplied migrations, meaning that your database is out of sync! Please create a backup and provide %s=1 environment variable to apply them.",
 				len(migrations),
 				MIGRATE_ENV,
 			)
-			tools.Log(slog.Info, "(ORM) List of migrations to apply:")
+			tlog.Info("(ORM) List of migrations to apply:")
 			for _, migration := range migrations {
 				slog.Info(migration)
 			}
 		} else {
-			return tools.PrefixErr("Database Migration", db.ApplyMigrations(migrations, altered))
+			return terr.Prefix("Database Migration", db.ApplyMigrations(migrations, altered))
 		}
 	}
 
@@ -106,7 +106,7 @@ func (db *DB) ApplyMigrations(migrations []string, altered bool) error {
 	signal.Notify(interruptChan, os.Interrupt, syscall.SIGTERM)
 
 	for i := COUNTDOWN; i > 0; i-- {
-		tools.Log(slog.Warn, "(DANGER!) Migrating in %d...\n", i)
+		tlog.Warn("(DANGER!) Migrating in %d...\n", i)
 		time.Sleep(1 * time.Second)
 
 		select {
@@ -127,11 +127,11 @@ func (db *DB) ApplyMigrationsNow(migrations []string, altered bool) error {
 
 	for i, migration := range migrations {
 		if altered && strings.Contains(migration, "\nADD") {
-			tools.Log(slog.Info, "--- Skipping migration %d/%d (Overwritten)", i+1, length)
+			tlog.Info("--- Skipping migration %d/%d (Overwritten)", i+1, length)
 			continue
 		}
 
-		tools.Log(slog.Info, "--- Applying migration %d/%d...", i+1, length)
+		tlog.Info("--- Applying migration %d/%d...", i+1, length)
 		err := db.Exec(migration)
 		if err != nil {
 			slog.Error(err.Error())

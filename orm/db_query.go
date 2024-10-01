@@ -6,16 +6,16 @@ import (
 	"strings"
 
 	"github.com/bbfh-dev/go-orm/orm/tables"
-	"github.com/bbfh-dev/go-tools/tools"
+	"github.com/bbfh-dev/go-tools/tools/terr"
 )
 
 func (db *DB) Select(dest interface{}, query string) error {
-	tools.Assert(dest != nil, "Columns must not be nil")
-	tools.Assert(db.handle != nil, "DB handle must not be nil")
+	terr.Assert(dest != nil, "Columns must not be nil")
+	terr.Assert(db.handle != nil, "DB handle must not be nil")
 	slog.Debug("(ORM) Query", "query", query)
 
 	err := db.handle.Select(dest, query)
-	return tools.PrefixErr("(ORM) Query "+query, err)
+	return terr.Prefix("(ORM) Query "+query, err)
 }
 
 func (db *DB) Exec(query string, args ...any) error {
@@ -38,7 +38,7 @@ func (db *DB) Fields(query string, table tables.Table, fields ...string) (fields
 		query,
 	))
 	if err != nil {
-		return out, tools.PrefixErr("DB Query(SELECT)", err)
+		return out, terr.Prefix("DB Query(SELECT)", err)
 	}
 	defer rows.Close()
 
@@ -46,7 +46,7 @@ func (db *DB) Fields(query string, table tables.Table, fields ...string) (fields
 		row := make(map[string]interface{})
 		err = rows.MapScan(row)
 		if err != nil {
-			return out, tools.PrefixErr("DB Rows.Scan", err)
+			return out, terr.Prefix("DB Rows.Scan", err)
 		}
 		for key, value := range row {
 			out[key] = fmt.Sprintf("%v", value)

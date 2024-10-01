@@ -3,7 +3,7 @@ module github.com/bbfh-dev/go-orm
 go 1.23.1
 
 require (
-	github.com/bbfh-dev/go-tools v1.0.2
+	github.com/bbfh-dev/go-tools v1.0.3
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/tursodatabase/go-libsql v0.0.0-20240916111504-922dfa87e1e6
 	gotest.tools v2.2.0+incompatible

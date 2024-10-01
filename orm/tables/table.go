@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/bbfh-dev/go-tools/tools"
+	"github.com/bbfh-dev/go-tools/tools/terr"
 )
 
 type Table interface {
@@ -13,7 +13,7 @@ type Table interface {
 }
 
 func assertFieldDBExists(field reflect.StructField) {
-	tools.Assert(
+	terr.Assert(
 		len(field.Tag.Get("db")) > 0,
 		"Table field must have 'db' tag describing how it should be called in SQL!",
 	)
@@ -26,7 +26,7 @@ func GetColumns(table Table) map[string]string {
 	for i := range tableType.NumField() {
 		field := tableType.Field(i)
 		assertFieldDBExists(field)
-		tools.Assert(
+		terr.Assert(
 			len(field.Tag.Get("create")) > 0,
 			"Table field must have 'create' tag describing the datatype and constaints (e.g. TEXT NOT NULL)!",
 		)

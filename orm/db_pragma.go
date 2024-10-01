@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/bbfh-dev/go-orm/orm/tables"
-	"github.com/bbfh-dev/go-tools/tools"
+	"github.com/bbfh-dev/go-tools/tools/terr"
 )
 
 type pragmaCol struct {
@@ -23,7 +23,7 @@ func (db *DB) PragmaOf(table tables.Table) (pragma, error) {
 	var columns []pragmaCol
 	err := db.Select(&columns, fmt.Sprintf("PRAGMA table_info(%s);", table.SQL()))
 	if err != nil {
-		return nil, tools.PrefixErr("PragmaOf()", err)
+		return nil, terr.Prefix("PragmaOf()", err)
 	}
 
 	var builder strings.Builder

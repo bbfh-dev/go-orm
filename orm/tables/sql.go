@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bbfh-dev/go-tools/tools"
+	"github.com/bbfh-dev/go-tools/tools/tmap"
 )
 
 func createTable(table Table, name string) string {
@@ -12,7 +12,10 @@ func createTable(table Table, name string) string {
 		"CREATE TABLE %s (%s);",
 		name,
 		strings.Join(
-			tools.FormatMap(GetColumns(table), tools.DefaultFormat(`'%s' %s`)),
+			tmap.Flatten(
+				GetColumns(table),
+				func(k, v string) string { return fmt.Sprintf("'%s' %s", k, v) },
+			),
 			", ",
 		),
 	)
@@ -27,10 +30,8 @@ func CREATE_TEMP_TABLE(table Table) string {
 }
 
 func COPY_TABLE(table Table, dest string, pragma map[string]string) string {
-	fields := strings.Join(tools.FormatMap(
-		pragma,
-		func(key, value string) string { return key },
-	), ", ")
+	keys, _ := tmap.Split(pragma)
+	fields := strings.Join(keys, ", ")
 
 	return fmt.Sprintf(
 		`INSERT INTO %s (%s)
