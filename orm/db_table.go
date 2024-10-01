@@ -44,36 +44,3 @@ func SingleEntity[T tables.Table](db *DB, table *T, query string) error {
 	*table = entities[0]
 	return nil
 }
-
-// func GetFields[T any](db *DB, table tables.Table, out *[]T, fields []string, query string) error {
-// 	rows, err := db.handle.Queryx(
-// 		fmt.Sprintf("SELECT %s FROM %s %s;", strings.Join(fields, ", "), table.SQL(), query),
-// 	)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	defer rows.Close()
-//
-// 	// cols, err := rows.Columns()
-// 	// if err != nil {
-// 	// 	return err
-// 	// }
-//
-// 	for rows.Next() {
-// 		row := make(map[string]interface{})
-// 		err := rows.MapScan(row)
-// 		if err != nil {
-// 			return tools.PrefixErr("Scanning row", err)
-// 		}
-// 		for i, field := range fields {
-// 			value, ok := row[field]
-// 			if !ok {
-// 				return fmt.Errorf("SQL didn't return field %s", field)
-// 			}
-// 			*out[i] = value
-// 		}
-// 		fmt.Println(row)
-// 	}
-//
-// 	return nil
-// }
