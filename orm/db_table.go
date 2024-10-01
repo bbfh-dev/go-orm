@@ -10,7 +10,7 @@ import (
 var EmptyErr = errors.New("Result is empty")
 
 func (db *DB) InsertEntity(table tables.Table) error {
-	tableValues := tables.GetValues(table)
+	tableValues := tables.Values(table)
 
 	var keys, values []string
 	for key, value := range tableValues {
@@ -25,14 +25,14 @@ func (db *DB) InsertEntity(table tables.Table) error {
 	))
 }
 
-func GetEntities[T tables.Table](db *DB, table *[]T, query string) error {
+func Entities[T tables.Table](db *DB, table *[]T, query string) error {
 	var in = *new(T)
 	return db.Select(table, fmt.Sprintf("SELECT * FROM %s %s;", in.SQL(), query))
 }
 
-func GetSingleEntity[T tables.Table](db *DB, table *T, query string) error {
+func SingleEntity[T tables.Table](db *DB, table *T, query string) error {
 	var entities []T
-	err := GetEntities(db, &entities, query)
+	err := Entities(db, &entities, query)
 	if err != nil {
 		return err
 	}

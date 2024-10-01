@@ -19,7 +19,7 @@ func assertFieldDBExists(field reflect.StructField) {
 	)
 }
 
-func GetColumns(table Table) map[string]string {
+func Columns(table Table) map[string]string {
 	tableType := reflect.TypeOf(table)
 	var out = map[string]string{}
 
@@ -36,7 +36,7 @@ func GetColumns(table Table) map[string]string {
 	return out
 }
 
-func GetValues(table Table) map[string]string {
+func Values(table Table) map[string]string {
 	tableType := reflect.TypeOf(table)
 	tableValue := reflect.ValueOf(table)
 	var out = map[string]string{}

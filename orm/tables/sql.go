@@ -13,7 +13,7 @@ func createTable(table Table, name string) string {
 		name,
 		strings.Join(
 			tmap.Flatten(
-				GetColumns(table),
+				Columns(table),
 				func(k, v string) string { return fmt.Sprintf("'%s' %s", k, v) },
 			),
 			", ",

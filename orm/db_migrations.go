@@ -41,7 +41,7 @@ func (db *DB) GenMigrations() error {
 			continue
 		}
 
-		var tableColumns = tables.GetColumns(table)
+		var tableColumns = tables.Columns(table)
 
 		for column, tableCreate := range tableColumns {
 			pragmaCreate, ok := pragmaColumns[column]

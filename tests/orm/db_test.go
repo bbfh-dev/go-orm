@@ -133,12 +133,12 @@ func TestDB(test *testing.T) {
 	}
 
 	var tables []TestTableA
-	err = orm.GetEntities(db, &tables, "")
+	err = orm.Entities(db, &tables, "")
 	assert.NilError(test, err)
 	assert.DeepEqual(test, tables, []TestTableA{example})
 
 	var table TestTableA
-	err = orm.GetSingleEntity(db, &table, `WHERE example_id = 1`)
+	err = orm.SingleEntity(db, &table, `WHERE example_id = 1`)
 	assert.NilError(test, err)
 	assert.DeepEqual(test, table, example)
 
