@@ -1,5 +1,8 @@
 # Go ORM
 
+> [!IMPORTANT]
+> This project is now archived. It was more of a fun experience developing this, for production it's better to use something like [GORM](https://gorm.io/index.html)
+
 Designed to be a simple and reliable ORM for SQL databases.
 
 It doesn't perform any database altering operations unless given permission to. It's explicit in its actions and prints useful debug information using `slog.Debug`.
